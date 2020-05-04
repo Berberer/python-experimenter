@@ -3,11 +3,11 @@ def parse_properties_from_file(path):
     with open(path, "r") as property_file:
         properties = property_file.readlines()
         for prop in properties:
-            assignment = prop.split("=")
-            if len(assignment) == 2:
+            line = prop.strip().split("#")
+            line = line[0].strip()
+            if len(line) > 0 and line[0] != "#":
+                assignment = line.split("=")
                 key = assignment[0].strip()
-                if key[0] == "#":
-                    continue
                 value = assignment[1].strip()
                 parsed_value = [value]
                 if "," in value:
