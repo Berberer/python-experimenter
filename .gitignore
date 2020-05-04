@@ -159,3 +159,4 @@ $RECYCLE.BIN/
 
 ### Misc ###
 *.properties
+!res/test_property_files/*.properties
