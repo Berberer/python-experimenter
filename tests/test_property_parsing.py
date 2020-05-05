@@ -1,5 +1,5 @@
-import python_experimenter.property_parsing.properties_file_reader as r
-import python_experimenter.property_parsing.required_properties_checker as c
+import python_experimenter.property_handling.properties_file_reader as r
+import python_experimenter.property_handling.required_properties_checker as c
 
 
 class TestPropertyFileHandling:
