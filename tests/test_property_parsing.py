@@ -13,6 +13,7 @@ class TestPropertyFileHandling:
             "x": ["1", "2", "3"],
             "y": ["4", "5", "6"],
             "db.host": ["192.168.0.1"],
+            "db.type": ["MYSQL"],
             "db.username": ["experimenter"],
             "db.password": ["1234"],
             "db.database": ["experiments"],

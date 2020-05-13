@@ -2,6 +2,7 @@ def check_required_db_properties(properties):
     if isinstance(properties, dict):
         db_keys = [
             "db.host",
+            "db.type",
             "db.username",
             "db.password",
             "db.database",

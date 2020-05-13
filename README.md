@@ -9,6 +9,7 @@ This experiment runner is adopted and ported to Python from the Java [AILibs exp
 A properties file for a simple mathematic operations experiment could look for example like the following:
 ```
 db.host = 192.168.0.1
+db.type = MYSQL
 db.username = experimenter
 db.password = 123
 db.database = experiments
@@ -21,7 +22,9 @@ y=4,5,6
 ```
 With such a configuration the experimenter would connect to the `experiments` database, check if the `test` table exists, and create if otherwise.
 
-Afterwards, it looks up in the table which combinations of the key-fields x and y are not created yet and reserve the missing combination for this instance.
+Currently only `MYSQL` is supported for `db.type`, but other types can easily be integrated by extending `python_experimenter/database_handler.py`.
+
+After checking for an existing table and possibly creating a new one, it looks up in the table which combinations of the key-fields x and y are not created yet and reserve the missing combination for this instance.
 For example, if the combination x=2 and y=4 is missing from the table, it will call the custom experiment function and persist the computed result-fields in a new database row.
 
 Such a custom experiment function for the multiplication and addition example could look like this:
@@ -36,3 +39,11 @@ def calculate_results(keyfields):
     return resultfields
 ```
 This function will be called iteratively with random combinations not included in the table, until each possible combination is present.
+
+The complete experiment can be run with the following snippet for the example:
+```python
+from python_experimenter.experiment_runner import ExperimentRunner
+
+runner = ExperimentRunner(calculate_results, <path to properties file>)
+runner.run()
+```
