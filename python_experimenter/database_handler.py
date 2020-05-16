@@ -42,3 +42,7 @@ class AbstractDatabaseHandler(ABC):
     @abstractmethod
     def count_entries(self):
         pass
+
+    @abstractmethod
+    def close_connection(self):
+        pass
