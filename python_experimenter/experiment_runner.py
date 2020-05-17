@@ -1,7 +1,10 @@
+import random
+import time
+import traceback
 from python_experimenter.property_handling import (
     properties_file_reader,
     required_properties_checker,
-    random_property_selector,
+    random_property_selector as selec,
 )
 from python_experimenter.database_handler import (
     create_database_handler_from_config,
@@ -31,10 +34,10 @@ class ExperimentRunner:
                 print("Could not create DB handler!")
                 return
 
+            db_handler.open_connection()
+
             if db_handler.is_connected():
-                db_handler.check_table_and_create_if_missing(
-                    self.properties["db.table"]
-                )
+                db_handler.check_table_and_create_if_missing()
             else:
                 print("Is not connected to DB!")
                 return
@@ -48,19 +51,26 @@ class ExperimentRunner:
             while db_handler.is_connected() and (
                 db_handler.count_entries() < experiments_amount
             ):
-                experiment_entry = random_property_selector(self.properties)
+                experiment_entry = selec.create_random_keyfield_configuration(
+                    self.properties
+                )
                 experiment_id = db_handler.reserve_entry(experiment_entry)
 
                 if experiment_id is not None:
                     try:
-                        result_fields = self.evaluation_function(
+                        resultfields = self.evaluation_function(
                             experiment_entry
                         )
-                        db_handler.save_results(experiment_id, result_fields)
-                    except Exception as e:
-                        db_handler.save_error(experiment_id, e)
-        except Exception as exp_e:
-            print(f"Experiment error: {exp_e}")
+                        db_handler.save_results(experiment_id, resultfields)
+                    except Exception:
+                        db_handler.save_error(
+                            experiment_id,
+                            traceback.format_exc(chain=False, limit=3),
+                        )
+                time.sleep(random.uniform(1.0, 5.0))
+
+        except Exception:
+            print(f"Experiment error: {traceback.format_exc()}")
         finally:
             if db_handler is not None:
                 db_handler.close_connection()

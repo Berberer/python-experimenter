@@ -30,8 +30,8 @@ For example, if the combination x=2 and y=4 is missing from the table, it will c
 Such a custom experiment function for the multiplication and addition example could look like this:
 ```python
 def calculate_results(keyfields):
-    x = keyfields["x"]
-    y = keyfields["y"]
+    x = int(keyfields["x"])
+    y = int(keyfields["y"])
     resultfields = {
         "multiplication": x * y,
         "addition": x + y
