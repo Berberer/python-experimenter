@@ -232,7 +232,7 @@ class MySqlDatabaseHandler(AbstractDatabaseHandler):
         query = query + (
             f"start_date datetime NOT NULL, "
             f"finished_date datetime NULL, "
-            f"exception varchar(255) NULL, "
+            f"exception text NULL, "
             f"PRIMARY KEY (experiment_id), "
             f"UNIQUE({','.join(self.keyfields)}) "
             f");"
