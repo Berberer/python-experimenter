@@ -1,4 +1,3 @@
-import json
 import random
 import time
 import traceback
@@ -66,9 +65,7 @@ class ExperimentRunner:
                     except Exception:
                         db_handler.save_error(
                             experiment_id,
-                            json.dumps(
-                                traceback.format_exc(chain=False, limit=3)
-                            ),
+                            traceback.format_exc(chain=False, limit=3),
                         )
                 time.sleep(random.uniform(1.0, 5.0))
 

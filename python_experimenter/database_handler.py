@@ -189,10 +189,10 @@ class MySqlDatabaseHandler(AbstractDatabaseHandler):
         if self._can_execute():
             query = (
                 f"UPDATE {self.table} "
-                f"SET finished_date = NOW(), exception = '{error}' "
+                f"SET finished_date = NOW(), exception = %s "
                 f"WHERE experiment_id = {id};"
             )
-            self.cursor.execute(query)
+            self.cursor.execute(query, params=(error,))
             self.connection.commit()
 
     def count_entries(self):
