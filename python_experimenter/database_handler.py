@@ -120,7 +120,7 @@ class MySqlDatabaseHandler(AbstractDatabaseHandler):
         return self.connected
 
     def check_table_and_create_if_missing(self):
-        if self._can_execute():
+        if self._can_execute() and self.is_connected():
             table_check = (
                 f"SELECT * "
                 f"FROM information_schema.tables "
@@ -144,7 +144,7 @@ class MySqlDatabaseHandler(AbstractDatabaseHandler):
                     print(f"Error during MySQL table creation: {e}")
 
     def reserve_entry(self, entry):
-        if self._can_execute():
+        if self._can_execute() and self.is_connected():
             check_query = f"SELECT COUNT(*) FROM {self.table} WHERE "
             keyfield_comparisons = list(
                 map(lambda k: f"{k} = '{entry[k]}'", self.keyfields)
@@ -169,7 +169,7 @@ class MySqlDatabaseHandler(AbstractDatabaseHandler):
         return None
 
     def save_results(self, id, resultfields):
-        if self._can_execute():
+        if self._can_execute() and self.is_connected():
             resultfield_values = []
             for resultfield in self.resultfields:
                 if resultfield in resultfields:
@@ -186,7 +186,7 @@ class MySqlDatabaseHandler(AbstractDatabaseHandler):
             self.connection.commit()
 
     def save_error(self, id, error):
-        if self._can_execute():
+        if self._can_execute() and self.is_connected():
             query = (
                 f"UPDATE {self.table} "
                 f"SET finished_date = NOW(), exception = %s "
@@ -197,7 +197,7 @@ class MySqlDatabaseHandler(AbstractDatabaseHandler):
 
     def count_entries(self):
         result = 0
-        if self._can_execute():
+        if self._can_execute() and self.is_connected():
             try:
                 self.cursor.execute(f"SELECT COUNT(*) FROM {self.table};")
                 result = self.cursor.fetchone()[0]
