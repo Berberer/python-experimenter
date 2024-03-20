@@ -1,4 +1,4 @@
-black==19.3b0
+black==24.3.0
 mysql-connector-python==8.0.20
 pre-commit==1.18.3
 tox==3.14.0
